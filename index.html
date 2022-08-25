@@ -2,40 +2,29 @@
 <html>
     <head>
         <link rel="stylesheet" href="style.css">
-        <script src="apps.js" defer></script>
-        <script src="main.js" defer></script>
     </head>
     <body>
-        <div id="main-container">
-            <div id="sidebar-left" class="column">
-                <div id="todo-container" class="row">
-                    <h1>[t]odo</h1>
-                    <ul id="todo-list">
-                        <p>No tasks available!</p>
-                        <p><b>[a]</b>dd new</p>
+        <div id="grid_container">
+            <div id="sidebar">
+                <div id="journal-container">
+                    <h1>Journal</h1>
+                    <textarea name="journalarea" id="journalarea" cols="30" rows="10">empty journal</textarea>
+                </div>
+                <div id="todo-container">
+                    <h1>Todo</h1>
+                    <ul>
+                        <li>item 1</li>
+                        <li>item 2</li>
+                        <li>item 3</li>
                     </ul>
                 </div>
-                <div id="journal-container" class="row">
-                    <h1>[j]ournal</h1>
-                    <p id="journal-date-stamp">Date: 12-08-2022</p>
-                    <textarea id="journal-entry-textarea" disabled>
-                    </textarea>
-                </div>
             </div>
-            <div id="center-pane" class="column">
-                <div class="row">
-                    <div id="centerpane-header-container">
-                        <h1 id="page-title-header"><span style="font-weight: 200;">zifmann.tech::</span>startpage</h1>
-                        <h1 id="time"><span id="hours">10</span><span style="font-weight: 100" id="minutes">40</span></h1>
-                    </div>
-                    <div id="centerpane-quickaccess-container">
-                        <h1>quickaccess</h1>
-                        <div id="quickaccess-internal-container">
-                        </div>
-                    </div>
+            <div id="middle-container">
+                <div id="widgets-container">
+                    <h1>Startpage</h1>
                 </div>
-                <div id="prompt-container" class="row">
-                    <input type="text" value="NORMAL" id="prompt" name="prompt" disabled>
+                <div id="command-area">
+                    <input type="text" name="command" id="command">
                 </div>
             </div>
         </div>
