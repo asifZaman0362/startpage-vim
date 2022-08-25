@@ -1,183 +1,32 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
-            :root {
-                --col-border: #504945;
-                --col-bg: #282828;
-                --col-fg: #ebdbb2;
-            }
-            html {
-                width: 100%;
-                height: 100%;
-            }
-            body {
-                font-family: "IBM Plex Sans";
-                font-size: 12px;
-                background-color: var(--col-bg);
-                color: var(--col-fg);
-                display: flex;
-                flex-direction: row;
-                flex-grow: 1;
-                padding: 0;
-                margin: 0;
-                width: 100%;
-                height: 100%;
-            }
-            #page-title-header {
-                font-style: italic;
-                font-size: 32px;
-            }
-            #main-container {
-                width: 100%;
-                display: grid;
-                grid-template-columns: 1fr 4fr;
-                grid-template-rows: 1fr;
-            }
-            #main-container .column:nth-child(1) {
-                border-right: 1px solid var(--col-border);
-            }
-            #main-container .row:last-child {
-                border-top: 1px solid var(--col-border);
-            }
-            #sidebar-left {
-                display: flex;
-                flex-direction: column;
-            }
-            #center-pane {
-                display: flex;
-                flex-direction: column;
-            }
-            #center-pane .row:first-child {
-                flex-grow: 1;
-            }
-            .row:last-child {
-                border-top: 1px solid var(--col-border);
-            }
-            .row {
-                padding: 0 20px;
-                flex-grow: 1;
-                display: flex;
-                flex-direction: column;
-            }
-            #prompt-container {
-                flex-grow: 0;
-            }
-            #time {
-                font-size: 120px;
-                margin: 0;
-            }
-            textarea, input[type="text"] {
-                background: transparent;
-                border: none;
-                color: var(--col-fg);
-                padding: 10px 0;
-                resize: none;
-                width: 100%;
-                flex-grow: 1;
-            }
-            textarea:focus, input:focus {
-                outline: none;
-            }
-        </style>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div id="main-container">
-            <div id="sidebar-left" class="column">
-                <div id="todo-container" class="row">
-                    <h1>[t]odo</h1>
-                    <ul id="todo-list">
-                        <p>No tasks available!</p>
-                        <p><b>[a]</b>dd new</p>
+        <div id="grid_container">
+            <div id="sidebar">
+                <div id="journal-container">
+                    <h1>Journal</h1>
+                    <textarea name="journalarea" id="journalarea" cols="30" rows="10">empty journal</textarea>
+                </div>
+                <div id="todo-container">
+                    <h1>Todo</h1>
+                    <ul>
+                        <li>item 1</li>
+                        <li>item 2</li>
+                        <li>item 3</li>
                     </ul>
                 </div>
-                <div id="journal-container" class="row">
-                    <h1>[j]ournal</h1>
-                    <p id="journal-date-stamp">Date: 12-08-2022</p>
-                    <textarea id="journal-entry-textarea" disabled>
-                    </textarea>
-                </div>
             </div>
-            <div id="center-pane" class="column">
-                <div class="row">
-                    <div id="centerpane-header-container">
-                        <h1 id="page-title-header"><span style="font-weight: 200;">zifmann.tech::</span>startpage</h1>
-                        <h1 id="time"><span id="hours">10</span><span style="font-weight: 100" id="minutes">40</span></h1>
-                    </div>
-                    <div id="centerpane-quickaccess-container">
-                        <h1>quickaccess</h1>
-                        <div id="quickaccess-internal-container">
-                        </div>
-                    </div>
+            <div id="middle-container">
+                <div id="widgets-container">
+                    <h1>Startpage</h1>
                 </div>
-                <div id="prompt-container" class="row">
-                    <input type="text" value="NORMAL" id="prompt" name="prompt" disabled>
+                <div id="command-area">
+                    <input type="text" name="command" id="command">
                 </div>
             </div>
         </div>
-        <script type="text/javascript">
-            var focused = false, todoFocused = false;
-            var mode = "normal";
-            const journal = document.getElementById('journal-entry-textarea');
-            const promptArea = document.getElementById('prompt');
-            function setTime(timeElement) {
-                const time = new Date();
-                const hours = time.getHours();
-                const minutes = time.getMinutes();
-                timeElement[0].innerHTML = hours;
-                timeElement[1].innerHTML = minutes;
-            }
-            function handleKeyPress(event) {
-                if (focused) return;
-                if (event.code == 'KeyJ') focusJournal();
-                else if (event.code == 'Semicolon') switchCommandMode();
-                else if (event.code == 'KeyT') focusTodo();
-                else if (event.code == 'Escape') switchCommandMode();
-            }
-            function unfocusJournal() {
-                journal.removeEventListener('keypress');
-                journal.disabled = true;
-                document.body.focus();
-                focused = false;
-            }
-            function focusJournal() {
-                journal.disabled = false;
-                journal.focus();
-                promptArea.value = "INSERT";
-                focused = true;
-            }
-            function focusTodo() {
-                focused = true;
-                todoFocused = true;
-            }
-            function promptEventHandler(event) {
-                if (event.code == "Escape" && focused) {
-                    document.body.focus();
-                    focused = false;
-                    mode = "normal";
-                    promptArea.value = "NORMAL";
-                }
-            }
-            function switchCommandMode() {
-                if (mode == "normal") {
-                    mode = "command";
-                    promptArea.disabled = false;
-                    promptArea.value = ":";
-                    promptArea.focus();
-                    focused = true;
-                    todoFocused = false;
-                } else {
-                    mode = "normal";
-                    promptArea.disabled = true;
-                    promptArea.value = "NORMAL";
-                    focused = false;
-                }
-            }
-            const timeElement = [ document.getElementById('hours'), document.getElementById('minutes') ];
-            if (timeElement.length > 0) setInterval(() => { setTime(timeElement); }, 1000);
-            document.addEventListener('keypress', handleKeyPress);
-            promptArea.addEventListener('keypress', promptEventHandler);
-        </script>
     </body>
 </html>
